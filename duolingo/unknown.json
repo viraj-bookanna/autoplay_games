@@ -1,5 +1,5 @@
 {
-    "dibujar": "draw",
-    "jugar": "play",
-    "nadar": "swim"
+    "nadar": "swim",
+    "mirar": "look",
+    "correr": "run"
 }
