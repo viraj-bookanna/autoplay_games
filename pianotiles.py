@@ -1,5 +1,9 @@
 import pyautogui, time, keyboard, win32api, win32con
+'''
 
+whotto msg ekak dapan 
+https://t.me/Contact_meMFbot
+'''
 time.sleep(2)
 
 def click(x, y):
