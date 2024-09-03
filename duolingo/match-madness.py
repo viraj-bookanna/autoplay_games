@@ -15,12 +15,12 @@ async def get_buttons():
         #print(node.attrib['resource-id'], node.attrib['text'])
         skipBtns = ["NO THANKS", "CONTINUE", "END SESSION"]
         if node.attrib['text'] in skipBtns or node.attrib['resource-id'] in ["com.duolingo:id/matchMadnessStartChallenge", "com.duolingo:id/tabLeagues", "com.duolingo:id/rampUpFab"]:
-            pos = re.search('\[(\d+),(\d+)\]\[(\d+),(\d+)\]', node.attrib['bounds'])
+            pos = re.search(r'\[(\d+),(\d+)\]\[(\d+),(\d+)\]', node.attrib['bounds'])
             pos = [round((int(pos[1])+int(pos[3]))/2), round((int(pos[2])+int(pos[4]))/2)]
             await tap_button(pos)
             return await get_buttons()
         elif node.attrib['resource-id'] == "com.duolingo:id/optionText" and node.attrib['enabled']:
-            pos = re.search('\[(\d+),(\d+)\]\[(\d+),(\d+)\]', node.attrib['bounds'])
+            pos = re.search(r'\[(\d+),(\d+)\]\[(\d+),(\d+)\]', node.attrib['bounds'])
             pos = [round((int(pos[1])+int(pos[3]))/2), round((int(pos[2])+int(pos[4]))/2)]
             if pos[0] < 300:
                 buttons['left'][node.attrib['text']] = {'coords': pos}
@@ -42,6 +42,10 @@ async def update(file_name, jdata):
     with open(file_name, 'w') as f:
         f.write(json.dumps(jdata, indent=4))
 async def translate(txt, src):
+    with open('unknown.json', 'r') as f:
+        unk = json.loads(f.read())
+    if txt in unk:
+        return unk[txt]
     return t.translate(txt, src=src).text
 async def purge(old, new):
     try:
@@ -68,7 +72,7 @@ async def main():
                     client.app_start("com.pdanet", use_monkey=True)
                     await asyncio.sleep(1)
                     client.app_start("com.duolingo", use_monkey=True)
-                    os.system('start "PdaNetPC" "C:\Program Files (x86)\PdaNet for Android\PdaNetPC.exe"')
+                    os.system(r'start "PdaNetPC" "C:\Program Files (x86)\PdaNet for Android\PdaNetPC.exe"')
                     last_check = time.time()
             with open('translations.json', 'r') as f:
                 tr = json.loads(f.read())
